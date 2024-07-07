@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ic-auth-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/indus_db
+    username: root
+    password: secret-pw
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: a3701c1ffba322709b996e0fc9c2ff59ab4717cb72f3f2ecf9a160384a8aed76
+      
+            

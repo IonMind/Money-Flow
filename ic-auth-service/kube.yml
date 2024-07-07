@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-service
+        image: auth-service:minikube
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: cm-auth-service
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "800m"
+        ports:
+        - containerPort: 8080
+
+--- 
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-auth-service
+data:
+  jdbc_url: "jdbc:mysql://mysql-service:3306/indus_db"
+  db_username: root
+  db_pass: secret-pw
+  jwt_secret: a3701c1ffba322709b996e0fc9c2ff59ab4717cb72f3f2ecf9a160384a8aed76
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-service
+  ports:
+  - port: 8080
+    targetPort: 8080

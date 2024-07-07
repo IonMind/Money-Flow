@@ -1,0 +1,11 @@
+FROM maven:3.9.8-eclipse-temurin-17 as buildstage
+WORKDIR /opt/build
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY ./src ./src
+RUN mvn clean install -Dmaven.test.skip=true    
+
+FROM eclipse-temurin:17.0.11_9-jre-jammy
+ENV service_name="api_gateway" SPRING_PROFILES_ACTIVE="docker"
+COPY --from=buildstage /opt/build/target/*.jar /app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
