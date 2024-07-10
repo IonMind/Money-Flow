@@ -26,12 +26,12 @@ jobs:
         with:
           registry: us-central1-docker.pkg.dev
           username: _json_key_base64
-          password: ${{ secrets.DOCKER_PUSH_GCP }}
+          password: ${{secrets.DOCKER_PUSH_GCP}}
 
       - name: Build Image api-gateway
         uses: docker/build-push-action@v6
         with:
-          context: ../api_gateway/
+          context: ${{github.workspace}}/api_gateway
           push: true
           tags: "mf-docker-registry/api-gateway:${{steps.date.outputs.date}}-${{ github.run_number }}"
 
