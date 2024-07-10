@@ -62,8 +62,6 @@ jobs:
       
       - name : Deploy to GKE
         working-directory: ${{github.workspace}}
-        env:
-          KUBECONFIG: ./config
         run: |
           kubectl config get-contexts
 
