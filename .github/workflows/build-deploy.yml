@@ -10,7 +10,7 @@ on:
 run-name: build-deploy-workflow
 
 env:
-  tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+  Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
 
 jobs:
   docker_build:
@@ -36,7 +36,14 @@ jobs:
         with:
           context: ${{github.workspace}}/api_gateway
           push: true
-          tags: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+          tags: "${{env.Image_tag}}"
+  
+  Deployment_GKE:
+    name: Deploy to GKE
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
 
       - name: Install Kubectl
         uses: azure/setup-kubectl@v3
@@ -48,8 +55,7 @@ jobs:
         run: |
           echo ${{secrets.KUBE_CONFIG}} | base64 -d > config
           kubectl config get-contexts
-          echo $tag
-          sed -i 's\IMAGE\${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}\' kube.yaml
-          
+          sed -i 's\IMAGE\${{env.Image_tag}}\' ./api_gateway/kube.yaml
+          kubectl apply -f ./api_gateway/kube.yaml
 
   
