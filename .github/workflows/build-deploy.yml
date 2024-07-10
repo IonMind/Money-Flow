@@ -31,12 +31,12 @@ jobs:
           username: _json_key_base64
           password: ${{secrets.DOCKER_PUSH_GCP}}
 
-      # - name: Build Image api-gateway
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ${{github.workspace}}/api_gateway
-      #     push: true
-      #     tags: "${{env.Image_tag}}"
+      - name: Build Image api-gateway
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{github.workspace}}/api_gateway
+          push: true
+          tags: "${{env.Image_tag}}"
   
   Deployment_GKE:
     needs: docker_build
@@ -63,8 +63,8 @@ jobs:
       - name : Deploy to GKE
         working-directory: ${{github.workspace}}
         run: |
-          kubectl config get-contexts
-          kubectl get service
+          sed -i 's\IMAGE\${{env.Image_tag}}\' ./api_gateway/kube.yaml
+          kubectl apply -f ./api_gateway/kube.yaml
 
 
   
