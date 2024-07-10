@@ -33,6 +33,6 @@ jobs:
         with:
           context: ${{github.workspace}}/api_gateway
           push: true
-          tags: "${{env.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{steps.date.outputs.date}}_${{ github.run_number }}"
+          tags: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{steps.date.outputs.date}}_${{ github.run_number }}"
 
   
