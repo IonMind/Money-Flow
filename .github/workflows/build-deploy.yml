@@ -53,7 +53,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GKE_SERVICE_ACCOUNT_JSON }}'
-          
+
       - name: set kubeconfig
         uses: 'google-github-actions/get-gke-credentials@v2'
         with:
@@ -66,7 +66,6 @@ jobs:
           KUBECONFIG: ./config
         run: |
           kubectl config get-contexts
-          sed -i 's\IMAGE\${{env.Image_tag}}\' ./api_gateway/kube.yaml
-          kubectl apply -f ./api_gateway/kube.yaml
+
 
   
