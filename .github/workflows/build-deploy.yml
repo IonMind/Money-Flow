@@ -43,7 +43,7 @@ jobs:
         env:
           KUBECONFIG: ./config
         run: |
-          echo "${{secrets.KUBE_CONFIG}} " | base64 -d > config
+          echo ${{secrets.KUBE_CONFIG}} | base64 -d > config
           kubectl config get-contexts
           
 
