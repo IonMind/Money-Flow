@@ -19,7 +19,7 @@ jobs:
       - name: GCP Registry Logi
         uses: docker/login-action@v3
         with:
-          registry: "https://us-central1-docker.pkg.dev"
+          registry: us-central1-docker.pkg.dev
           username: _json_key_base64
           password: ${{ secrets.DOCKER_PUSH_GCP }}
 
