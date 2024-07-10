@@ -33,6 +33,6 @@ jobs:
         with:
           context: ${{github.workspace}}/api_gateway
           push: true
-          tags: "mf-docker-registry/api-gateway:${{steps.date.outputs.date}}-${{ github.run_number }}"
+          tags: "${{env.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{steps.date.outputs.date}}-${{ github.run_number }}"
 
   
