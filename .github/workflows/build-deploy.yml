@@ -35,4 +35,16 @@ jobs:
           push: true
           tags: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{steps.date.outputs.date}}_${{ github.run_number }}"
 
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v3  
+      
+      - name : Deploy to GKE
+        working-directory: ${{github.workspace}}
+        env:
+          KUBECONFIG: ./config
+        run: |
+          echo "${{secrets.KUBE_CONFIG}} " | base64 -d > config
+          kubectl config get-contexts
+          
+
   
