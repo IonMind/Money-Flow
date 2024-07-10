@@ -1,7 +1,12 @@
-on:
-  push:
+on: 
+  push: 
     branches:
       - 'main'
+  workflow_dispatch:
+    inputs:
+        version:
+          default: v1
+
 run-name: build-deploy-workflow
 
 jobs:
@@ -16,7 +21,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-      - name: GCP Registry Logi
+      - name: GCP Registry Login
         uses: docker/login-action@v3
         with:
           registry: us-central1-docker.pkg.dev
