@@ -31,14 +31,15 @@ jobs:
           username: _json_key_base64
           password: ${{secrets.DOCKER_PUSH_GCP}}
 
-      - name: Build Image api-gateway
-        uses: docker/build-push-action@v6
-        with:
-          context: ${{github.workspace}}/api_gateway
-          push: true
-          tags: "${{env.Image_tag}}"
+      # - name: Build Image api-gateway
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ${{github.workspace}}/api_gateway
+      #     push: true
+      #     tags: "${{env.Image_tag}}"
   
   Deployment_GKE:
+    needs: docker_build
     name: Deploy to GKE
     runs-on: ubuntu-22.04
     steps:
@@ -47,6 +48,16 @@ jobs:
 
       - name: Install Kubectl
         uses: azure/setup-kubectl@v3
+      
+      - name: gke auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GKE_SERVICE_ACCOUNT_JSON }}'
+      - name: set kubeconfig
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: 'indus-dev-cluster'
+          location: 'us-central1-b'
       
       - name : Deploy to GKE
         working-directory: ${{github.workspace}}
