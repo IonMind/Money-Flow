@@ -9,6 +9,9 @@ on:
 
 run-name: build-deploy-workflow
 
+env:
+  tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+
 jobs:
   docker_build:
     name: Docker buid and push
@@ -17,9 +20,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y_%m_%d')"
+      # - name: Get current date
+      #   id: date
+      #   run: echo "::set-output name=date::$(date +'%Y_%m_%d')"
 
       - name: GCP Registry Login
         uses: docker/login-action@v3
@@ -33,10 +36,10 @@ jobs:
         with:
           context: ${{github.workspace}}/api_gateway
           push: true
-          tags: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{steps.date.outputs.date}}_${{ github.run_number }}"
+          tags: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
 
       - name: Install Kubectl
-        uses: azure/setup-kubectl@v3  
+        uses: azure/setup-kubectl@v3
       
       - name : Deploy to GKE
         working-directory: ${{github.workspace}}
@@ -45,6 +48,8 @@ jobs:
         run: |
           echo ${{secrets.KUBE_CONFIG}} | base64 -d > config
           kubectl config get-contexts
+          echo $tag
+          sed -i 's\IMAGE\${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}\' kube.yaml
           
 
   

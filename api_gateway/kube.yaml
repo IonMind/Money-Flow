@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: api_gateway:minikube
+        image: IMAGE
         imagePullPolicy: Never
         envFrom:
           - configMapRef:
@@ -21,7 +21,7 @@ spec:
         resources:
           limits:
             memory: "800Mi"
-            cpu: "900m"
+            cpu: "900m" 
         ports:
         - containerPort: 8080
 
