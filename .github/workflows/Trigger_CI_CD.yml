@@ -37,6 +37,9 @@ jobs:
                 service: ${{ fromJSON(needs.trigger.outputs.changes) }}
         runs-on: ubuntu-22.04
         steps:
+            - name: checkout
+              uses: actions/checkout@v4    
+
             - name: ${{matrix.service}} 
               uses: ./.github/workflows/Build_Deploy.yml
               with:
