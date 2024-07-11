@@ -14,7 +14,7 @@ jobs:
         name: Filter Changes
         runs-on: ubuntu-22.04
         outputs:
-            changes: ${{steps.filter.outputs.changes}}
+            changes: ${{steps.filter.outputs}}
         steps:
             - name: checkout
               uses: actions/checkout@v4       
