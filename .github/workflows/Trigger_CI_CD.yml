@@ -29,39 +29,17 @@ jobs:
                     ic-auth-service:
                         - ic-auth-service/**
     build_deploy:
+        if: needs.trigger.outputs.changes != '[]'        
+        uses: ./.github/workflows/Build_Deploy.yml
+        with:
+            Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/${{matrix.service}} :${{ github.run_number }}"
+            context: ${{matrix.service}} 
         needs: trigger
-        name: Build_Deploy Services
-        if: needs.trigger.outputs.changes != '[]'
+        name: Build_Deploy 
         strategy:
             matrix:
                 service: ${{ fromJSON(needs.trigger.outputs.changes) }}
-        runs-on: ubuntu-22.04
-        steps:
-            - name: checkout
-              uses: actions/checkout@v4    
 
-            - name: ${{matrix.service}} 
-              uses: ./.github/workflows/Build_Deploy.yml
-              with:
-                Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/${{matrix.service}} :${{ github.run_number }}"
-                context: ${{matrix.service}}           
 
-    # api_gateway_build_deploy:
-    #     name: Build_Deploy api_gateway
-    #     needs: trigger
-    #     if: needs.trigger.steps.changes.outputs.api_gateway == 'true'
-    #     uses: ./.github/workflows/Build_Deploy.yml
-    #     with:
-    #         Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
-    #         context: api_gateway
 
-    # auth_service_build_deploy:
-    #     name:  Build_Deploy auth_service
-    #     needs: trigger
-    #     if: needs.trigger.steps.changes.outputs.expense_manager == 'true'
-    #     uses: ./.github/workflows/Build_Deploy.yml
-    #     with:
-    #         Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/auth_service:${{ github.run_number }}"
-    #         context: ic-auth-service
-    
             
