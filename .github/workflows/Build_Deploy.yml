@@ -25,12 +25,12 @@ jobs:
           username: _json_key_base64
           password: ${{secrets.DOCKER_PUSH_GCP}}
 
-      - name: Docker Build and Push 
-        uses: docker/build-push-action@v6
-        with:
-          context: ${{github.workspace}}/${{inputs.context}}
-          push: true
-          tags: "${{env.Image_tag}}"
+      # - name: Docker Build and Push 
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ${{github.workspace}}/${{inputs.context}}
+      #     push: true
+      #     tags: "${{env.Image_tag}}"
   
   # Deployment_GKE:
   #   needs: docker_build
