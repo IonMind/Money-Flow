@@ -53,7 +53,7 @@ jobs:
         working-directory: ${{github.workspace}}
         run: |
           sed -i 's\IMAGE\${{inputs.image_tag}}\' ./${{inputs.context}}/kube.yaml
-          kubectl apply -f ./api_gateway/kube.yaml
+          kubectl apply -f ./${{inputs.context}}/kube.yaml
 
 
   
