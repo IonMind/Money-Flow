@@ -34,6 +34,8 @@ jobs:
         with:
             Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/${{matrix.service}} :${{ github.run_number }}"
             context: ${{matrix.service}} 
+        secrets: 
+            docker_password: ${{secrets.DOCKER_PUSH_GCP}}
         needs: trigger
         name: Build_Deploy 
         strategy:

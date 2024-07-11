@@ -7,16 +7,16 @@ on:
       image_tag: 
         type: string
         required: true
-
-env:
-  Image_tag: ${{inputs.image_tag}}
+    secrets:
+      docker_password:
+        required: true
 
 jobs:
   docker_build:
-    name: Build and push ${{inputs.image_tag}}
+    name: Build and push ${{inputs.context}}
     runs-on: ubuntu-22.04
     steps:
-      
+
       - name: checkout
         uses: actions/checkout@v4    
 
@@ -25,14 +25,14 @@ jobs:
         with:
           registry: us-central1-docker.pkg.dev
           username: _json_key_base64
-          password: ${{secrets.DOCKER_PUSH_GCP}}
+          password: ${{secrets.docker_password}}
 
-      # - name: Docker Build and Push 
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ${{github.workspace}}/${{inputs.context}}
-      #     push: true
-      #     tags: "${{env.Image_tag}}"
+      - name: Docker Build and Push 
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{github.workspace}}/${{inputs.context}}
+          push: true
+          tags: "${{inputs.image_tag}}"
   
   # Deployment_GKE:
   #   needs: docker_build
