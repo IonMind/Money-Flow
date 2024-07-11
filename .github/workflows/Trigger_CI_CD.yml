@@ -36,6 +36,7 @@ jobs:
             context: ${{matrix.service}} 
         secrets: 
             docker_password: ${{secrets.DOCKER_PUSH_GCP}}
+            service_account_json: ${{secrets.GKE_SERVICE_ACCOUNT_JSON}}
         needs: trigger
         name: Build_Deploy 
         strategy:
