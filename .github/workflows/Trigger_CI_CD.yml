@@ -26,6 +26,15 @@ jobs:
                         - api_gateway/**
                     expense_manager:
                         - expense_manager/**
+    check:
+        needs: trigger
+        runs-on: ubuntu-22.04
+        steps:
+            - run: |
+                echo ${{needs.trigger.steps.changes.outputs.api_gateway}}
+                echo ${{needs.trigger.steps.changes.outputs.api_gateway == 'true'}}
+
+
     api_gateway_build_deploy:
         name: Build_Deploy api_gateway
         needs: trigger
