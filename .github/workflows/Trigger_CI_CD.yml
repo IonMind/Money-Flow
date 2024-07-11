@@ -63,4 +63,5 @@ jobs:
     #     with:
     #         Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/auth_service:${{ github.run_number }}"
     #         context: ic-auth-service
+    
             
