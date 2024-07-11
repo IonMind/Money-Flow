@@ -25,31 +25,37 @@ jobs:
                     api_gateway:
                         - api_gateway/**
                     expense_manager:
-                        - expense_manager/**
-    check:
-        needs: trigger
-        runs-on: ubuntu-22.04
-        steps:
-            - run: |
-                echo ${{needs.trigger.steps.changes.outputs.api_gateway}}
-                echo ${{needs.trigger.steps.changes.outputs.api_gateway == 'true'}}
+                        - ic-auth-service/**
 
+            - name: Build_Deploy api_gateway
+              if: steps.changes.outputs.api_gateway == 'true'
+              uses: ./.github/workflows/Build_Deploy.yml
+              with:
+                Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+                context: api_gateway
 
-    api_gateway_build_deploy:
-        name: Build_Deploy api_gateway
-        needs: trigger
-        if: needs.trigger.steps.changes.outputs.api_gateway == 'true'
-        uses: ./.github/workflows/Build_Deploy.yml
-        with:
-            Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
-            context: api_gateway
+            - name: Build_Deploy auth_service
+              if: steps.changes.outputs.ic-auth-service == 'true'
+              uses: ./.github/workflows/Build_Deploy.yml
+              with:
+                Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/auth_service:${{ github.run_number }}"
+                context: ic-auth-service
 
-    auth_service_build_deploy:
-        name:  Build_Deploy auth_service
-        needs: trigger
-        if: needs.trigger.steps.changes.outputs.expense_manager == 'true'
-        uses: ./.github/workflows/Build_Deploy.yml
-        with:
-            Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/auth_service:${{ github.run_number }}"
-            context: ic-auth-service
+    # api_gateway_build_deploy:
+    #     name: Build_Deploy api_gateway
+    #     needs: trigger
+    #     if: needs.trigger.steps.changes.outputs.api_gateway == 'true'
+    #     uses: ./.github/workflows/Build_Deploy.yml
+    #     with:
+    #         Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+    #         context: api_gateway
+
+    # auth_service_build_deploy:
+    #     name:  Build_Deploy auth_service
+    #     needs: trigger
+    #     if: needs.trigger.steps.changes.outputs.expense_manager == 'true'
+    #     uses: ./.github/workflows/Build_Deploy.yml
+    #     with:
+    #         Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/auth_service:${{ github.run_number }}"
+    #         context: ic-auth-service
             
