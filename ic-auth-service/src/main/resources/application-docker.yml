@@ -1,10 +1,10 @@
 spring:
   application:
-    name: ${service_name}
+    name: auth-service
   datasource:
     url: ${jdbc_url}
-    username: ${db_username}
-    password: ${db_pass}
+    username: ${username}
+    password: ${password}
     # driver-class-name: com.mysql.cj.jdbc.Driver
     
   jpa:

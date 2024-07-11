@@ -1,28 +1,23 @@
 on: 
-  push: 
-    branches:
-      - 'main'
-  workflow_dispatch:
+  workflow_call: 
     inputs:
-        version:
-          default: v1
-
-run-name: build-deploy-workflow
+      context:
+        type: string
+        required: true
+      image_tag: 
+        type: string
+        required: true
 
 env:
-  Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+  Image_tag: ${{inputs.image_tag}}
 
 jobs:
   docker_build:
-    name: Docker buid and push
+    name: Build and push ${{inputs.image_tag}}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
         uses: actions/checkout@v4
-
-      # - name: Get current date
-      #   id: date
-      #   run: echo "::set-output name=date::$(date +'%Y_%m_%d')"
 
       - name: GCP Registry Login
         uses: docker/login-action@v3
@@ -31,40 +26,40 @@ jobs:
           username: _json_key_base64
           password: ${{secrets.DOCKER_PUSH_GCP}}
 
-      - name: Build Image api-gateway
+      - name: Docker Build and Push 
         uses: docker/build-push-action@v6
         with:
-          context: ${{github.workspace}}/api_gateway
+          context: ${{github.workspace}}/${{inputs.context}}
           push: true
           tags: "${{env.Image_tag}}"
   
-  Deployment_GKE:
-    needs: docker_build
-    name: Deploy to GKE
-    runs-on: ubuntu-22.04
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
+  # Deployment_GKE:
+  #   needs: docker_build
+  #   name: Deploy to GKE
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v4
 
-      - name: Install Kubectl
-        uses: azure/setup-kubectl@v3
+  #     - name: Install Kubectl
+  #       uses: azure/setup-kubectl@v3
       
-      - name: gke auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GKE_SERVICE_ACCOUNT_JSON }}'
+  #     - name: gke auth
+  #       uses: 'google-github-actions/auth@v2'
+  #       with:
+  #         credentials_json: '${{ secrets.GKE_SERVICE_ACCOUNT_JSON }}'
 
-      - name: set kubeconfig
-        uses: 'google-github-actions/get-gke-credentials@v2'
-        with:
-          cluster_name: 'indus-dev-cluster'
-          location: 'us-central1-b'
+  #     - name: set kubeconfig
+  #       uses: 'google-github-actions/get-gke-credentials@v2'
+  #       with:
+  #         cluster_name: 'indus-dev-cluster'
+  #         location: 'us-central1-b'
       
-      - name : Deploy to GKE
-        working-directory: ${{github.workspace}}
-        run: |
-          sed -i 's\IMAGE\${{env.Image_tag}}\' ./api_gateway/kube.yaml
-          kubectl apply -f ./api_gateway/kube.yaml
+  #     - name : Deploy to GKE
+  #       working-directory: ${{github.workspace}}
+  #       run: |
+  #         sed -i 's\IMAGE\${{env.Image_tag}}\' ./api_gateway/kube.yaml
+  #         kubectl apply -f ./api_gateway/kube.yaml
 
 
   

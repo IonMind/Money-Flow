@@ -13,12 +13,13 @@ spec:
     spec:
       containers:
       - name: expense-manager
-        image: expense-manager:minikube
-        imagePullPolicy: Never
+        image: IMAGE
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
-          # will change later to cm-db
-              name: cm-auth-service 
+              name: service-discovery
+          - secretRef:
+              name: db-secrets
         resources:
           limits:
             memory: "512Mi"

@@ -1,0 +1,41 @@
+on:
+    push:
+        branches:
+            - 'main'
+    workflow_dispatch:
+        inputs:
+            version:
+                default: v1
+
+run-name: Deciding which microservices to deploy
+
+jobs:
+    trigger:
+        name: Evaluate and Trigger Changes
+        runs-on: ubuntu-22.04
+        steps:
+            - name: checking directory changes
+              uses: dorny/paths-filter@v3
+              id: changes
+              with:
+                filters: |
+                    api_gateway:
+                        - api_gateway/**
+                    expense_manager:
+                        - expense_manager/**
+    api_gateway_ci_cd:
+        needs: trigger
+        if: needs.trigger.steps.changes.outputs.api_gateway == 'true'
+        uses: ./.github/workflows/build-deploy.yml
+        with:
+            Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/api_gateway:${{ github.run_number }}"
+            context: api_gateway
+
+    expense_manager_ci_cd:
+        needs: trigger
+        if: needs.trigger.steps.changes.outputs.expense_manager == 'true'
+        uses: ./.github/workflows/build-deploy.yml
+        with:
+            Image_tag: "${{vars.DOCKER_IMAGE_PREFIX_GCP}}/expense_manager:${{ github.run_number }}"
+            context: expense_manager
+            

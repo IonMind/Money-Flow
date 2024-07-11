@@ -15,7 +15,7 @@ public class CustomPredicates {
 
       final String token = Utility.extractJWTToken(request);
 
-      RestClient restclient = RestClient.builder().baseUrl("http://auth-service:8080").build();
+      RestClient restclient = RestClient.builder().baseUrl(System.getenv("auth_service")).build();
 
       Boolean response = restclient.get().uri(uribuilder -> uribuilder.path("/public/user/validateToken")
           .queryParam("token", token).build())

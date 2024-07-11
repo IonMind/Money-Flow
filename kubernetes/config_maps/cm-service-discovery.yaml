@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-discovery
+data:
+  auth_service: "auth-service:8080"
+  expense_manager_service: "expense-manager-service:8080"

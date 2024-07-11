@@ -18,15 +18,15 @@ import static org.springframework.cloud.gateway.server.mvc.predicate.GatewayRequ
 @Configuration
 public class RouteConfiguration {
     // @Value("${auth_service}")
-    private String ic_auth_service_baseUrl = "http://auth-service:8080";
+    private String auth_service = System.getenv("auth_service");
 
     // @Value("${expense_manager_service}")
-    private String expense_manager_service_baseUrl = "http://expense-manager-service:8080";
+    private String expense_manager_service = System.getenv("expense_manager_service");
     
     @Bean
     public RouterFunction<ServerResponse> gatewayRouterFunctionPath() {
-        HandlerFunction<ServerResponse> base_public_handlerfun = HandlerFunctions.http(ic_auth_service_baseUrl);  //no auth required
-        HandlerFunction<ServerResponse> base_expense_manager_handlerfun = HandlerFunctions.http(expense_manager_service_baseUrl);
+        HandlerFunction<ServerResponse> base_public_handlerfun = HandlerFunctions.http(auth_service);  //no auth required
+        HandlerFunction<ServerResponse> base_expense_manager_handlerfun = HandlerFunctions.http(expense_manager_service);
         String public_paths[] = { "/public/user/register", "/public/user/login" };
         String expense_manager_paths[] = {"/expense/**"};
         

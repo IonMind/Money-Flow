@@ -19,8 +19,8 @@ public class JWTService {
     // MacAlgorithm alg = Jwts.SIG.HS512;
     // SecretKey key = alg.key().build();
 
-    @Value("${jwt.secret}")
-    private String stringKey;
+    // @Value("${jwt.secret}")
+    private String stringKey = System.getenv("jwt_secret");
 
     private SecretKey getKey() {
 

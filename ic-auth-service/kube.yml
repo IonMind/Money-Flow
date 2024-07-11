@@ -13,29 +13,19 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: auth-service:minikube
-        imagePullPolicy: Never
+        image: IMAGE
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
-              name: cm-auth-service
+              name: service-discovery
+          - secretRef:
+              name: db-secrets
         resources:
           limits:
             memory: "512Mi"
             cpu: "800m"
         ports:
         - containerPort: 8080
-
---- 
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cm-auth-service
-data:
-  jdbc_url: "jdbc:mysql://mysql-service:3306/indus_db"
-  db_username: root
-  db_pass: secret-pw
-  jwt_secret: a3701c1ffba322709b996e0fc9c2ff59ab4717cb72f3f2ecf9a160384a8aed76
 
 ---
 

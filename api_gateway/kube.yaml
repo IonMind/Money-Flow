@@ -14,24 +14,16 @@ spec:
       containers:
       - name: api-gateway
         image: IMAGE
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
-              name: cm-api-gateway
+              name: service-discovery
         resources:
           limits:
             memory: "800Mi"
             cpu: "900m" 
         ports:
         - containerPort: 8080
-
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cm-api-gateway
-data:
-  service_name: api_gatewayy
 
 ---
 apiVersion: v1
