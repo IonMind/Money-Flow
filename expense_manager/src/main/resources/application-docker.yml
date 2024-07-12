@@ -1,12 +1,11 @@
-
 spring:
   application:
     name: expense_manager
   datasource:
     url: ${jdbc_url}
-    username: ${db_username}
-    password: ${db_pass}
-    # driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
     
   jpa:
     show-sql: true

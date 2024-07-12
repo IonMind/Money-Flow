@@ -28,6 +28,8 @@ jobs:
                         - api_gateway/**
                     ic-auth-service:
                         - ic-auth-service/**
+                    expense_manager
+                        - expense_manager/**
     build_deploy:
         if: needs.trigger.outputs.changes != '[]'        
         uses: ./.github/workflows/Build_Deploy.yml
