@@ -10,6 +10,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect      
+logging:
+  level:
+    '[org.springframework.web]': trace
 
 jwt:
   secret: a3701c1ffba322709b996e0fc9c2ff59ab4717cb72f3f2ecf9a160384a8aed76
