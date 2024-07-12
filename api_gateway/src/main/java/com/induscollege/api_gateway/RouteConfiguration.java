@@ -33,11 +33,11 @@ public class RouteConfiguration {
 
         return GatewayRouterFunctions.route("register_login")
                 .route(path(public_paths), base_public_handlerfun)
-                .build()
-                .and(
-                        GatewayRouterFunctions.route("expense_manager")
-                                .route(isJWTTokenValid().and(path(expense_manager_paths)), base_expense_manager_handlerfun)
-                                .before(CustomFilters.addUserIdHeader())
-                                .build());
+                .build();
+                // .and(
+                //         GatewayRouterFunctions.route("expense_manager")
+                //                 .route(isJWTTokenValid().and(path(expense_manager_paths)), base_expense_manager_handlerfun)
+                //                 .before(CustomFilters.addUserIdHeader())
+                //                 .build());
     }
 }
