@@ -18,7 +18,7 @@ import static org.springframework.cloud.gateway.server.mvc.predicate.GatewayRequ
 @Configuration
 public class RouteConfiguration {
     // @Value("${auth_service}")
-    private String auth_service = "http://auth-service"; //System.getenv("auth_service");
+    private String auth_service = System.getenv("auth_service"); //"http://auth-service"; 
 
     // @Value("${expense_manager_service}")
     private String expense_manager_service = System.getenv("expense_manager_service");
