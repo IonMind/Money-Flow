@@ -15,6 +15,9 @@ spec:
       - name: auth-service
         image: IMAGE
         imagePullPolicy: Always
+        env:
+          - name: USERNAME
+            value: root
         envFrom:
           - configMapRef:
               name: service-discovery

@@ -3,8 +3,8 @@ spring:
     name: auth-service
   datasource:
     url: ${jdbc_url}
-    username: ${username}
-    password: secret-pw
+    username: ${USERNAME}
+    password: ${PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     
   jpa:
