@@ -19,9 +19,12 @@ spec:
           - configMapRef:
               name: service-discovery
         resources:
+          requests:
+            memory: "512Mi"
+            cpu: "0.5"
           limits:
-            memory: "800Mi"
-            cpu: "900m" 
+            memory: "1Gi"
+            cpu: "1"
         ports:
         - containerPort: 8080
 
