@@ -24,9 +24,12 @@ spec:
           - secretRef:
               name: db-secrets
         resources:
-          limits:
+          requests:
             memory: "512Mi"
-            cpu: "800m"
+            cpu: "0.5"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
         ports:
         - containerPort: 8080
 
