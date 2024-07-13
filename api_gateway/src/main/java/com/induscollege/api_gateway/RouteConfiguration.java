@@ -11,17 +11,24 @@ import com.induscollege.api_gateway.filters.CustomFilters;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 
-import static com.induscollege.api_gateway.predicates.CustomPredicates.isJWTTokenValid;
+import com.induscollege.api_gateway.predicates.CustomPredicates;
 import static org.springframework.cloud.gateway.server.mvc.predicate.GatewayRequestPredicates.path;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Configuration
 public class RouteConfiguration {
-    // @Value("${auth_service}")
-    private String auth_service = System.getenv("auth_service"); //"http://auth-service"; 
 
-    // @Value("${expense_manager_service}")
-    private String expense_manager_service = System.getenv("expense_manager_service");
+    @Autowired
+    CustomPredicates  customPredicates;
+
+    @Value("${auth_service}")
+    private String auth_service; // = "http://localhost:8085";  // = System.getenv("auth_service"); 
+
+    @Value("${expense_manager_service}")
+    private String expense_manager_service; //= "http://localhost:8090"; // = System.getenv("expense_manager_service");
     
     @Bean
     public RouterFunction<ServerResponse> gatewayRouterFunctionPath() {
@@ -36,7 +43,7 @@ public class RouteConfiguration {
                 .build()
                 .and(
                         GatewayRouterFunctions.route("expense_manager")
-                                .route(isJWTTokenValid().and(path(expense_manager_paths)), base_expense_manager_handlerfun)
+                                .route(customPredicates.isJWTTokenValid().and(path(expense_manager_paths)), base_expense_manager_handlerfun)
                                 .before(CustomFilters.addUserIdHeader())
                                 .build());
     }

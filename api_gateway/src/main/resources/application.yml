@@ -1,3 +1,8 @@
 spring:
   application:
     name: api_gateway
+server:
+  port: 4000
+
+auth_service: "http://localhost:8085"
+expense_manager_service: "http://localhost:8090"

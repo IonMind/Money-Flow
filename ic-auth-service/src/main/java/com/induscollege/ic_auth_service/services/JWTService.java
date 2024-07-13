@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -18,8 +20,8 @@ public class JWTService {
     // MacAlgorithm alg = Jwts.SIG.HS512;
     // SecretKey key = alg.key().build();
 
-    // @Value("${jwt.secret}")
-    private String stringKey = System.getenv("jwt_secret");
+    @Value("${jwt.secret}")
+    private String stringKey; // = System.getenv("jwt_secret");
 
     private SecretKey getKey() {
 
