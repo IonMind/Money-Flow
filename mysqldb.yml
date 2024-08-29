@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: mysql 
   template:
     metadata:
       labels:
